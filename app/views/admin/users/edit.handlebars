@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="co-md-12 col-lg-12 mb-30">
+        <div class="box">
+            <div class="box-head">
+                <h4 class="title">ویرایش کاربر</h4>
+            </div>
+            <div class="box-body">
+                <div class="row mbn-20">
+
+                    <!-- form field -->
+                    <form action="/admin/users/update/{{user.id}}" method="POST">
+                        <div class="col-lg-6 col-12 mb-20">
+                            {{#if hasError }}
+                            <div class="alert alert-outline-secondary" role="alert">
+                                <p>خطا!</p>
+                                {{#each errors}}
+                                <p>{{this}}</p>
+                                {{/each}}
+                            </div>
+                            {{/if}}
+
+                            <div class="row mbn-15">
+                                <div class="col-12 mb-30">
+                                    <input name="full_name" type="text" class="form-control" value="{{user.full_name}}"
+                                        placeholder="نام کاربر">
+                                </div>
+                                <div class="col-12 mb-30">
+                                    <input name="email" type="email" class="form-control" value="{{user.email}}"
+                                        placeholder="ایمیل">
+                                </div>
+
+                                <div class="col-12 mb-30">
+                                    <input name="password" type="password" class="form-control" placeholder="کلمه عبور جدید">
+                                </div>
+
+                                <div class="col-12 mb-30">
+
+                                    <h6 class="mb-15">نقش کاربر</h6>
+
+                                    <label><input type="radio" name="role" value="{{userRole.USER}}" {{#isSelectedRole
+                                            userRole.USER}}checked{{/isSelectedRole}}>کاربر</label>
+
+                                    <label><input type="radio" name="role" value="{{userRole.AUTHOR}}" {{#isSelectedRole
+                                            userRole.AUTHOR}}checked{{/isSelectedRole}}>نویسنده</label>
+
+                                    <label><input type="radio" name="role" value="{{userRole.ADMIN}}" {{#isSelectedRole
+                                            userRole.ADMIN}}checked{{/isSelectedRole}}>مدیر</label>
+
+                                </div>
+                                <div class="col-12 mb-30">
+                                    <button type="submit" class="button button-primary"><span>ذخیره سازی</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- form field -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
