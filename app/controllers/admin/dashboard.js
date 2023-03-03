@@ -9,8 +9,7 @@ exports.index = async (req, res) => {
         totalPosts: await statisticsModel.totalPosts(),
         totalViews: await statisticsModel.totalViews()
     }
-    res.render('admin/dashboard/index' , {
-        layout: 'admin',
+    res.adminRender('admin/dashboard/index' , {
         ...data
     })
 }

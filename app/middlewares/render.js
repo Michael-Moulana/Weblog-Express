@@ -16,7 +16,6 @@ module.exports = app => {
             res.render(template, options)
         }
 
-
         next()
     })
 }

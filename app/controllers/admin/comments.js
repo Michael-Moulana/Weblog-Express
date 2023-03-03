@@ -12,9 +12,9 @@ exports.index = async (req, res) => {
         // adding new fields to the comments ( 'userAvatar' )
         comment.userAvatar = userService.gravatar(comment.user_email)
         comment.created_at_persian = langService.toPersianNumbers(dateService.toPersianDate(comment.created_at))
-        return comment
+        return comment 
     })
-    res.render('admin/comments/index', { layout: 'admin', comments: presentedComments, helpers: {
+    res.adminRender('admin/comments/index', { comments: presentedComments, helpers: {
         commentBackground: function(status, options) {
             let cssClass = 'alert '
             switch(true) {

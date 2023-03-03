@@ -10,8 +10,8 @@ exports.index = async (req, res) => {
         presentedSettings[item.setting_name] = item.setting_value
     })
 
-    res.render('admin/settings/index', {
-        layout: 'admin', config: presentedSettings, helpers: {
+    res.adminRender('admin/settings/index', {
+        config: presentedSettings, helpers: {
             isChecked: function(value, options) {
                 // if true, 
                 return parseInt(value) === 1 ? options.fn(this) : options.inverse(this)
@@ -23,7 +23,6 @@ exports.index = async (req, res) => {
 exports.store = async (req, res) => {
     // all data received from body
     const settings = req.body
-    console.log(settings);
     // new object for adding data from checkboxes to it
     const validatedSettings = {}
 
@@ -50,8 +49,8 @@ exports.store = async (req, res) => {
         validatedSettings.users_can_submit_comment = 0
     }
 
-    const result = await settingModel.update(validatedSettings)
+    await settingModel.update(validatedSettings)
+    req.flash('success', ['تنظیمات جدید با موقیت ذخیره شدند'])
     res.redirect('/admin/settings')
-    
 }
 

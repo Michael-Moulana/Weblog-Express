@@ -6,17 +6,16 @@ const langService = require('@services/langService')
 
 const postValidator = require('@validators/post')
 
-const {statuses} = require('@models/post/postStatus')
+const { statuses } = require('@models/post/postStatus')
 
 // displaying the posts
 exports.index = async (req, res) => {
 
     // getting all posts
     const posts = await postModel.findAll()
-    
+
     // new obj to render with new fields such as persian date 
     const presentedPosts = posts.map(post => {
-
         // new field for displaying creation date with persian numbers and persian calendar using two services 
         post.created_at_persian = langService.toPersianNumbers(dateService.toPersianDate(post.created_at))
 
@@ -25,8 +24,8 @@ exports.index = async (req, res) => {
 
         return post
     })
-    res.render('admin/posts/index', {
-        layout: 'admin',
+    res.adminRender('admin/posts/index', {
+
         posts: presentedPosts
     })
 }
@@ -36,7 +35,7 @@ exports.index = async (req, res) => {
 // retrieving users to make them post's author
 exports.create = async (req, res) => {
     const users = await userModel.findAll(['id', 'full_name'])
-    res.render('admin/posts/create', { layout: 'admin', users })
+    res.adminRender('admin/posts/create', { users })
 }
 
 // getting post's data from the body and storing them to db
@@ -51,19 +50,20 @@ exports.store = async (req, res) => {
     // errors is an array of strings(error messages)
     const errors = postValidator.create(postData)
     if (errors.length > 0) {
+        errors.forEach(error => {
+            req.flash('errors', error);
+        });
+
         const users = await userModel.findAll(['id', 'full_name'])
-        res.render('admin/posts/create', { layout: 'admin', users, errors, hasError: errors.length > 0 })
-    } 
+
+        return res.adminRender('admin/posts/create', { users, errors, hasError: errors.length > 0 })
+    }
     const insertId = await postModel.create(postData)
     if (insertId) {
-        // req.flash('success', 'مطلب جدید با موفقیت ایجاد شد')
+        req.flash('success', 'مطلب جدید با موفقیت ایجاد شد')
         res.redirect('/admin/posts')
     }
 
-    // const insertId = await postModel.create(postData)
-    // if (insertId) {
-    //     res.redirect('/admin/posts')
-    // }
 }
 
 // deletes post by id
@@ -73,6 +73,7 @@ exports.remove = async (req, res) => {
     if (parseInt(postID) !== 0) {
         const result = await postModel.delete(postID)
     }
+
     res.redirect('/admin/posts')
 }
 
@@ -82,17 +83,21 @@ exports.edit = async (req, res) => {
     if (parseInt(postID) === 0) {
         res.redirect('/admin/posts')
     }
+
     const post = await postModel.find(postID)
     const users = await userModel.findAll(['id', 'full_name'])
-    res.render('admin/posts/edit', { layout: 'admin', users, post, postStatus: statuses(), helpers: {
-        isPostAuthor: function(userID, options) {
-            // if true, 
-            return post.author_id === userID ? options.fn(this) : options.inverse(this)
-        },
-        isSelectedStatus: function(status, options) {
-            return post.status === status ? options.fn(this) : options.inverse(this)
+
+    res.adminRender('admin/posts/edit', {
+        users, post, postStatus: statuses(), helpers: {
+            isPostAuthor: function (userID, options) {
+                // if true, 
+                return post.author_id === userID ? options.fn(this) : options.inverse(this)
+            },
+            isSelectedStatus: function (status, options) {
+                return post.status === status ? options.fn(this) : options.inverse(this)
+            }
         }
-    } })
+    })
 }
 
 exports.update = async (req, res) => {
@@ -110,6 +115,7 @@ exports.update = async (req, res) => {
 
     const result = await postModel.update(postID, postData)
     if (result) {
+        req.flash('success', ['بروز رسانی مطلب با موفقیت انجام شد!'])
         return res.redirect('/admin/posts')
     }
 }

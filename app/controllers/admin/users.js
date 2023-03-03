@@ -12,14 +12,13 @@ exports.index = async (req, res) => {
     // getting all users
     const users = await userModel.findAll()
 
-    const presentedUser = users.map(user => { 
+    const presentedUser = users.map(user => {
         user.created_at_persian = langService.toPersianNumbers(dateService.toPersianDate(user.created_at))
 
         return user
     })
 
-    res.render('admin/users/index', {
-        layout: 'admin',
+    res.adminRender('admin/users/index', {
         users: presentedUser
     })
 }
@@ -28,7 +27,7 @@ exports.index = async (req, res) => {
 // rendering users to create route to displaying them
 // retrieving users to make them post's author
 exports.create = async (req, res) => {
-    res.render('admin/users/create', { layout: 'admin' })
+    res.adminRender('admin/users/create')
 }
 
 // getting post's data from the body and storing them to db
@@ -41,13 +40,18 @@ exports.store = async (req, res) => {
     }
 
     const errors = userValidator.create(userData)
-    
+
     if (errors.length > 0) {
-        return res.render('admin/users/create', { layout: 'admin', userData, errors, hasError: errors.length > 0 })
-    } 
+        errors.forEach(error => {
+            req.flash('errors', error);
+        });
+
+        return res.adminRender('admin/users/create', { userData, errors, hasError: errors.length > 0 })
+    }
 
     const insertId = await userModel.create(userData)
     if (insertId) {
+        req.flash('success', ['کاربر جدید با موقیت ثبت نام شد'])
         res.redirect('/admin/users')
     }
 }
@@ -59,6 +63,7 @@ exports.remove = async (req, res) => {
     if (parseInt(userID) !== 0) {
         const result = await userModel.delete(userID)
     }
+    req.flash('success', ['کاربر با موقیت حذف شد'])
     res.redirect('/admin/users')
 }
 
@@ -69,12 +74,14 @@ exports.edit = async (req, res) => {
     }
 
     const user = await userModel.find(userID)
-    
-    res.render('admin/users/edit', { layout: 'admin', user, userRole,helpers: {
-        isSelectedRole: function(role, options) {
-            return user.role === role ? options.fn(this) : options.inverse(this)
+
+    res.adminRender('admin/users/edit', {
+        user, userRole, helpers: {
+            isSelectedRole: function (role, options) {
+                return user.role === role ? options.fn(this) : options.inverse(this)
+            }
         }
-    } })
+    })
 }
 
 exports.update = async (req, res) => {
@@ -96,8 +103,9 @@ exports.update = async (req, res) => {
 
     console.log(userData)
 
-    
-
     const result = await userModel.update(userID, userData)
+    if (result) {
+        req.flash('success', ['کاربر با موقیت ویرایش شد'])
+    }
     return res.redirect('/admin/users')
 }

@@ -1,5 +1,10 @@
 <div class="row">
     <div class="co-md-12 col-lg-12 mb-30">
+        {{#if success }}
+        <div class="alert alert-success" role="alert">
+            <p>{{success}}</p>
+        </div>
+        {{/if}}
         <div class="box">
             <div class="box-head">
                 <h4 class="title">تنظیمات</h4>
@@ -14,7 +19,8 @@
                             <h6 class="mb-15">عمومی</h6>
                             <div class="row mb-15">
                                 <div class="col-12 mb-30">
-                                    <input type="text" name="website_title" class="form-control" placeholder="عنوان وب سایت" value="{{config.website_title}}">
+                                    <input type="text" name="website_title" class="form-control"
+                                        placeholder="عنوان وب سایت" value="{{config.website_title}}">
                                 </div>
                                 <div class="col-12 mb-30">
                                     <textarea name="website_description" class="form-control"
@@ -27,12 +33,13 @@
                             <h6 class="mb-15">محتوا</h6>
                             <div class="row mb-15">
                                 <div class="col-12 mb-30">
-                                    <input type="number" name="posts_per_page" class="form-control" placeholder="هر صفحه"
-                                        value="{{config.posts_per_page}}">
+                                    <input type="number" name="posts_per_page" class="form-control"
+                                        placeholder="هر صفحه" value="{{config.posts_per_page}}">
                                 </div>
                                 <div class="col-12 mb-30">
-                                    <label class="admox-checkbox"><input name="users_can_submit_comment"
-                                            type="checkbox" {{#isChecked config.users_can_submit_comment}}checked{{/isChecked}}><i class="icon"></i>کاربران می توانند
+                                    <label class="admox-checkbox"><input name="users_can_submit_comment" type="checkbox"
+                                            {{#isChecked config.users_can_submit_comment}}checked{{/isChecked}}><i
+                                            class="icon"></i>کاربران می توانند
                                         دیدگاه ثبت کنند</label>
                                 </div>
                             </div>
@@ -42,7 +49,9 @@
                             <h6 class="mb-15">عضویت</h6>
                             <div class="row mb-15">
                                 <div class="col-12 mb-30">
-                                    <label class="admox-checkbox"><input name="users_can_register" type="checkbox" {{#isChecked config.users_can_register}}checked{{/isChecked}}><i class="icon"></i>هر کسی می تواند ثبت نام کند</label>
+                                    <label class="admox-checkbox"><input name="users_can_register" type="checkbox"
+                                            {{#isChecked config.users_can_register}}checked{{/isChecked}}><i
+                                            class="icon"></i>هر کسی می تواند ثبت نام کند</label>
                                 </div>
                             </div>
                         </div>
