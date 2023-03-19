@@ -24,14 +24,18 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
+    "connect-redis": "^7.0.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
+    "express-mysql-session": "^2.1.8",
     "express-session": "^1.17.3",
     "gravatar": "^1.8.2",
     "jalali-moment": "^3.3.11",
     "module-alias": "^2.2.2",
     "mysql2": "^2.3.3",
+    "redis": "^4.6.5",
     "req-flash": "^0.0.3"
   },
   "devDependencies": {

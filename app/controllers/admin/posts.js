@@ -25,7 +25,6 @@ exports.index = async (req, res) => {
         return post
     })
     res.adminRender('admin/posts/index', {
-
         posts: presentedPosts
     })
 }
